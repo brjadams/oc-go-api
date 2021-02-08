@@ -10,8 +10,8 @@ const validPass string = "#th@nH@rm#y#r!$100%D0p#"
 
 type Content struct {
 	// Response Struct
-	Valid   bool   `json: "valid"`
-	Message string `json: "message"`
+	Valid   bool   `json:"valid" form:"valid" query:"valid"`
+	Message string `json:"message" form:"message" query:"message"`
 }
 
 type Login struct {
@@ -33,8 +33,8 @@ func generateOneTimeCompare() string {
 	return compare
 }
 
-func checkLogin(user string, pass string, onetime string) bool {
-	checkUser := validate(user, validUser)
+func checkLogin(name string, pass string, onetime string) bool {
+	checkUser := validate(name, validUser)
 	checkPass := validate(pass, validPass)
 	checkOnetime := validate(onetime, generateOneTimeCompare())
 	return checkUser && checkPass && checkOnetime

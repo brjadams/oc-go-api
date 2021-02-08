@@ -15,9 +15,9 @@ func login(c echo.Context) error {
 	if err := c.Bind(login); err != nil {
 		return err
 	}
-
+	fmt.Println("login: %s", login.Name)
 	checked := checkLogin(login.Name, login.Password, login.Onetime)
-	fmt.Println("Checked: %s", checked)
+	fmt.Println("Checked: %bool", checked)
 	if checked {
 		isValid = true
 		msg += "Yay!"
@@ -31,7 +31,7 @@ func login(c echo.Context) error {
 	}
 
 	fmt.Printf("toReturn : %s\n", res)
-	return c.JSON(http.StatusOK, res)
+	return c.JSONPretty(http.StatusOK, res, " ")
 
 }
 
