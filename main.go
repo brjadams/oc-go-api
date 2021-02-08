@@ -11,12 +11,13 @@ import (
 func login(c echo.Context) error {
 	msg := ""
 	isValid := false
-	user := c.FormValue("username")
-	pass := c.FormValue("password")
+	login := new(Login)
+	if err := c.Bind(login); err != nil {
+		return err
+	}
 
-	fmt.Printf("Login Attempt: %s, %s\n", user, pass)
-	checked := checkLogin(user, pass)
-
+	checked := checkLogin(login.Name, login.Password, login.Onetime)
+	fmt.Println("Checked: %s", checked)
 	if checked {
 		isValid = true
 		msg += "Yay!"
@@ -29,6 +30,7 @@ func login(c echo.Context) error {
 		Message: msg,
 	}
 
+	fmt.Printf("toReturn : %s\n", res)
 	return c.JSON(http.StatusOK, res)
 
 }
@@ -40,7 +42,7 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	e.POST("/login", login)
+	e.POST("/api/login", login)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8000"))
